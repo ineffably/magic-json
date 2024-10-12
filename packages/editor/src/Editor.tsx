@@ -18,7 +18,7 @@ export const MagicJsonEditor = () => {
 
       // console.log('App:jsonDeconstructed:', jsonDeconstructed);
       // this is where you would dispatch an updated loaded state
-      if(dispatch){
+      if (dispatch) {
         dispatch({ type: 'Loaded', payload: { isLoaded: true } });
       }
     })()
@@ -30,25 +30,27 @@ export const MagicJsonEditor = () => {
     <div style={{ width: '100vw', display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
       <Tabs
         style={{ padding: '5px' }}
-        items={[{
+        items={[
+          {
           key: 'all',
           label: 'Render Raw',
-          children: <div style={{ height: '95vh', overflowY: 'auto', maxWidth: '50vw' }} >
-            <MagicRender json={subjectJson} options={{ renderType: 'raw' }} />
-          </div>
+          children: (
+            <div style={{ height: '95vh', overflowY: 'auto', maxWidth: '50vw' }} >
+              <MagicRender json={subjectJson} options={{ renderType: 'raw' }} />
+            </div>
+          )
         },
-        // {
-        //   key: 'edit',
-        //   label: 'Render Edit Mode',
-        //   children: <MagicJson json={subjectJson} options={{ renderType: 'edit' }} />
-        // },
         {
           key: 'values',
           label: 'Render Values',
-          children: <div style={{ maxWidth: '50vw' }}><MagicRender json={subjectJson} options={{ renderType: 'values' }} /></div>
+          children: (
+            <div style={{ maxWidth: '50vw' }}>
+              <MagicRender json={subjectJson} options={{ renderType: 'values' }} />
+            </div>
+          )
         }
-
-        ]} />
+        ]} 
+      />
       <div style={{ marginTop: '65px' }}>
         <Editor
           height="90vh"

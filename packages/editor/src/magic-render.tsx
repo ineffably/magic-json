@@ -18,9 +18,9 @@ export const MagicRenderValues = ({ jsonDeconstructed }: MagicRnderProps) => {
     <div>
       <div><i>({type})</i> <b>{key}</b> {typofValue !== 'object' && value}</div>
       {typofValue == 'object' &&
-        <div style={{ padding: '0 5px', margin: '0 5px' }}>
-          {Array.isArray(value) && value.map((item, index) => <MagicRenderValues jsonDeconstructed={item} />)}
-          {!Array.isArray(value) && typofValue === 'object' && Object.keys(value).map(field => <MagicRenderValues jsonDeconstructed={value[field]} />)}
+        <div style={{ padding: '0 5px', margin: '0 5px' }} key={key}>
+          {Array.isArray(value) && value.map((item, index) => <MagicRenderValues key={(key+index)} jsonDeconstructed={item} />)}
+          {!Array.isArray(value) && typofValue === 'object' && Object.keys(value).map(field => <MagicRenderValues key={key+field} jsonDeconstructed={value[field]} />)}
         </div>
       }
     </div>
@@ -48,13 +48,13 @@ export const MagicRenderEdit = ({ jsonDeconstructed }: MagicRnderProps) => {
       if (target.type === 'array' && Array.isArray(target.value)) return target.value.map(item => <Render target={item} />);
       if (target.type && target.key && typeof target.value === 'object') {
         return (
-          <div style={{ marginLeft: '10px' }}>
+          <div style={{ marginLeft: '10px' }} key={target.key}>
             <div>
               <div><i>{target.type}</i></div>
             </div>
             {target.value && Object.keys(target.value).map(field => {
               return (
-                <div>
+                <div key={field}>
                   <b>{field}</b>: <Render target={target.value[field]} />
                 </div>
               )
