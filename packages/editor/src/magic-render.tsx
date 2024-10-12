@@ -42,7 +42,6 @@ export const MagicRenderRaw = ({ jsonDeconstructed }: MagicRnderProps) => {
 export const MagicRenderEdit = ({ jsonDeconstructed }: MagicRnderProps) => {
 
   function Render({ target }) {
-    console.log('Render:target:', target);
     if (target === null || target === undefined) return null;
 
     if (typeof target === 'object') {

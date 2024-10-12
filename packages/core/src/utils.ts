@@ -1,9 +1,11 @@
 
-export const isEmptyObject = (object) => (
+export const isEmptyObject = (object): boolean => (
   Boolean(object) && typeof object === 'object' && Object.keys(object).length === 0
 )
 
-export function hasShape(subject = {}, shape = {}, path = '/', errors = []) {
+export const replaceNumericPath = (path: string, replaceWith: string = '*') => path.replace(/\d+/g, replaceWith);
+
+export function hasShape(subject = {}, shape = {}, path = '/', errors = []): boolean {
   if (!Boolean(subject) || typeof subject !== 'object') {
     throw new Error('hasShape expects an object type')
   }

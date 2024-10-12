@@ -10,7 +10,7 @@ export const MagicJsonEditor = () => {
   const { state, dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    const init = async () => {
+    (async () => {
       const jsonDeconstructed = constructMetaJSON(json);
 
       // console.log('jsonDeconstructed size:', JSON.stringify(jsonDeconstructed).length);
@@ -18,9 +18,10 @@ export const MagicJsonEditor = () => {
 
       // console.log('App:jsonDeconstructed:', jsonDeconstructed);
       // this is where you would dispatch an updated loaded state
-      dispatch({ type: 'Loaded', payload: { isLoaded: true } });
-    }
-    init();
+      if(dispatch){
+        dispatch({ type: 'Loaded', payload: { isLoaded: true } });
+      }
+    })()
   }, [])
 
   const subjectJson = json;

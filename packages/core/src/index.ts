@@ -1,20 +1,23 @@
-import { ExtendedType } from "./types";
+import { replaceNumericPath } from "./utils";
 
-type JSONMeta = MetaValue | MetaValue[];
+export type ExtendedType = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | "array" | "arraycell";
+
+export type JSONMeta = MetaValue | MetaValue[];
 
 export interface MetaValue {
   __stats?: MetaStats;
   key: string;
   value: MetaValue | MetaValue[] | any | any[];
-  type: string;
+  type: ExtendedType;
   depth?: number;
   path?: string;
 }
 
-interface MetaStats {
-  cols: { [key: string]: number };
-  fields: { [key: string]: number };
-  types: { [key: string]: number };
+export interface MetaStats {
+  cols?: { [key: string]: number };
+  fields?: { [key: string]: number };
+  types?: { [key: string]: number };
+  strings?: { [key: string]: number };
 }
 
 // returns array as a type
@@ -35,8 +38,13 @@ export function getEmptyStats(): MetaStats {
     cols: {},
     fields: {},
     types: {},
+    strings: {}
   })
 }
+
+export const getDefaultOptions = () => ({
+  stats: false
+});
 
 export function deconstructMetaJSON(json: MetaValue | MetaValue[]): any {
   // console.log('incoming:json:', JSON.stringify(json, null, 2));
@@ -82,51 +90,61 @@ export function deconstructMetaJSON(json: MetaValue | MetaValue[]): any {
   }
 }
 
-export function constructMetaJSON(json: any, depth = 0, stats = getEmptyStats(), path = ''): MetaValue | MetaValue[] | any | any[] {
+export function constructMetaJSON(json: any, options = getDefaultOptions(), depth = 0, stats = getEmptyStats(), path = ''): MetaValue | MetaValue[] | any | any[] {
   const type = getJSONType(json);
 
   if (path === '') {
-    return {
+    const result = {
       depth,
       key: '_root',
       path: '',
-      value: constructMetaJSON(json, depth + 1, stats, '/'),
-      type,
+      value: constructMetaJSON(json, options, depth + 1, stats, '/'),
+      type
+    } as MetaValue
+    if(options.stats) {
+      result.__stats = stats;
     }
+    return result;
   }
 
   if (!json || (type !== 'object' && type !== 'array') || isEmptyObject(json)) {
+    if(typeof json === 'string' && json !== '') {
+      stats.strings[json] = (stats.strings[json] || 0) + 1;
+    }
     return json;
   }
 
   if (type === 'array') {
     return json.map((entry, index) => {
+      if(typeof entry === 'object') {
+        const cols = Object.keys(entry).join(',') + `,${replaceNumericPath(path, `[0-${json.length - 1}`)}]`;
+        stats.cols[cols] = (stats.cols[cols] || 0) + 1;
+      }
       const nextPath = `${path}${index}/`;
       return {
         depth,
         key: index + '',
         path: nextPath,
-        value: constructMetaJSON(entry, depth, stats, nextPath),
+        value: constructMetaJSON(entry, options, depth, stats, nextPath),
         type: 'arraycell'
       }
-      return constructMetaJSON(entry, depth + 1, stats, nextPath);
     })
   }
 
   if (type === 'object') {
     const keys = Object.keys(json);
     return keys.map((key) => {
+      stats.fields[key] = (stats.fields[key] || 0) + 1;
       const nextPath = `${path}${key}/`;
       return {
         depth,
         key,
         path: nextPath,
         type: getJSONType(json[key]),
-        value: constructMetaJSON(json[key], depth + 1, stats, nextPath),
+        value: constructMetaJSON(json[key], options, depth + 1, stats, nextPath),
       }
     });
   }
-
 }
 
 export class MagicJson {
