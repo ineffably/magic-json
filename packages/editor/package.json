@@ -1,0 +1,39 @@
+{
+  "name": "@magic-json/editor",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rm -rf ./lib",
+    "watch": "webpack watch --mode development",
+    "build:dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "build:clean": "npm run clean && npm run build",
+    "test": "jest --config ./../../jest.config.js ./test/rule-editor.test.tsx --coverage",
+    "gendocs": "typedoc --out ./docs ./src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@magic-json/core": "^1.0.0",
+    "@monaco-editor/react": "^4.6.0",
+    "antd": "^5.21.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/react": "^18.3.10",
+    "bundle-stats-webpack-plugin": "^4.15.1",
+    "css-loader": "^7.1.2",
+    "jest": "^29.7.0",
+    "jest-webpack-resolver": "^0.3.0",
+    "mini-css-extract-plugin": "^2.9.1",
+    "style-loader": "^4.0.0",
+    "ts-jest": "^29.2.5"
+  },
+  "peerDependencies": {
+    "react": ">= 18",
+    "react-dom": ">= 18"
+  }
+}

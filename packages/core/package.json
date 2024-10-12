@@ -1,0 +1,38 @@
+{
+  "name": "@magic-json/core",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "jest ./test/**/*.test.ts* --config ./../../jest.config.js  --coverage",
+    "clean": "rm -rf ./lib",
+    "watch": "webpack watch --mode development",
+    "build:dev": "webpack --mode development",
+    "build:clean:dev": "npm run clean && npm run build:dev",
+    "build": "webpack --mode production",
+    "build:clean": "npm run clean && npm run build",
+    "gendocs": "typedoc --out ./docs ./src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@types/jest": "^29.5.13",
+    "@types/node": "^22.7.4",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-webpack-resolver": "^0.3.0",
+    "lerna": "^8.1.8",
+    "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typedoc": "^0.26.7",
+    "typescript": "^5.6.2",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "jestWebpackResolver": {
+    "webpackConfig": "./webpack.config.js"
+  }
+}

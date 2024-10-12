@@ -1,0 +1,7 @@
+node_modules
+docs
+src
+test
+lerna.json
+webpack.config.js
+tsconfig.json

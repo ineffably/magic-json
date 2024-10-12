@@ -1,0 +1,32 @@
+{
+  "name": "magic-json",
+  "version": "1.0.0",
+  "private": true,
+  "keywords": [
+    "monorepo",
+    "react",
+    "typescript",
+    "jest"
+  ],
+  "author": "Chad Neff <ccneff@gmail.com> (https://github.com/ineffably)",
+  "license": "MIT",
+  "description": "This code traverses a JSON object and generates a user interface for visually understanding the data relationships.",
+  "scripts": {
+    "test": "jest --config ./jest.config.js  --coverage",
+    "build": "npm run build --workspaces --if-present",
+    "build:dev": "npm run build:dev --workspaces --if-present",
+    "editor": "npm run editor --workspace=editor",
+    "gendocs": "npm run gendocs --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present",
+    "examples": "npm run examples --workspace=@magic-json/examples",
+    "watch": "concurrently \"npm run watch --workspace=@magic-json/core\" \"npm run watch --workspace=@magic-json/editor\""
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/editor",
+    "packages/examples"
+  ],
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

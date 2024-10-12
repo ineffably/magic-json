@@ -1,0 +1,10 @@
+.mainrow {
+  display: flex;
+  flex-direction: row;
+}
+
+.gen-names, .edit-names {
+  padding: 10px;
+  margin: 10px;
+}
+

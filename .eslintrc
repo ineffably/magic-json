@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "env": {
+    "browser": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-empty-function": 1,
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "@typescript-eslint/no-explicit-any": "off"
+  },
+  "ignorePatterns": [
+    "jest.config.js",
+    "webpack.config.js"
+  ]
+}
