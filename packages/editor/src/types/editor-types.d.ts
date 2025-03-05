@@ -1,3 +1,4 @@
+import type { MagicValue } from '@magic-json/core';
 import type { Dispatch } from 'react';
 
 export interface AppState {
@@ -32,4 +33,8 @@ export type IndexedCounts = {
 export type IndexedEntries = {
   categories: IndexedCategory[];
   itemCounts: IndexedCounts;
+}
+
+export interface MagicRenderProps {
+  jsonDeconstructed: MagicValue; // _root value is never an array
 }

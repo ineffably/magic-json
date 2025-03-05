@@ -6,8 +6,8 @@ export interface AgentArgs {
   depth: number;
   path: string;
 }
-export type TraverseAgent = (a: AgentArgs) => any;
 
+export type TraverseAgent = (a: AgentArgs) => any;
 
 export const traverse = (json: any, agents = [] as TraverseAgent[], depth = 0, path = '/') => {
   if (!json || typeof json !== 'object') return json;
@@ -21,7 +21,6 @@ export const traverse = (json: any, agents = [] as TraverseAgent[], depth = 0, p
       )
     })
   };
-
 
   const fields = Object.keys(json);
   const result = {} as any;

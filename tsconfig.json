@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
+    "outDir": "./lib",
     "incremental": true,
     "module": "commonjs",
     "target": "ES2021",
@@ -19,6 +19,7 @@
     "strict": false
   },
   "exclude": [
+    "coverage",
     "node_modules",
     "lib",
     "dist",

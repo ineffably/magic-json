@@ -20,6 +20,8 @@ module.exports = {
     '\\.(css|less)$': '<rootDir>/css-stub.js'
   },
   verbose: true,
+  collectCoverage: true,
+  coverageDirectory: '<rootDir>/coverage',
   collectCoverageFrom: [
     '<rootDir>/packages/editor/src/**/*.ts*',
     '<rootDir>/packages/core/src/**/*.ts',

@@ -1,17 +1,15 @@
-import { constructMetaJSON, MetaValue } from '@magic-json/core';
+import { MagicJson, magicJsonToJson } from '@magic-json/core';
 import { Editor } from '@monaco-editor/react';
+import type { MagicRenderProps } from './types/editor-types';
+import { MagicRenderSettingsEditor } from './magic-render-settings-editor';
+import { Tabs } from 'antd';
 
-interface MagicRnderProps {
-  jsonDeconstructed: MetaValue;
-}
 
-export const MagicRenderValues = ({ jsonDeconstructed }: MagicRnderProps) => {
-  const { key, type, value, depth } = jsonDeconstructed;
-
+export const MagicRenderValues = ({ jsonDeconstructed }: MagicRenderProps) => {
   if (Array.isArray(jsonDeconstructed)) {
     return jsonDeconstructed.map(entry => <MagicRenderValues jsonDeconstructed={entry} />);
   }
-
+  const { key, type, value, depth } = jsonDeconstructed;
   const typofValue = typeof value;
 
   return (
@@ -19,75 +17,60 @@ export const MagicRenderValues = ({ jsonDeconstructed }: MagicRnderProps) => {
       <div><i>({type})</i> <b>{key}</b> {typofValue !== 'object' && value}</div>
       {typofValue == 'object' &&
         <div style={{ padding: '0 5px', margin: '0 5px' }} key={key}>
-          {Array.isArray(value) && value.map((item, index) => <MagicRenderValues key={(key+index)} jsonDeconstructed={item} />)}
-          {!Array.isArray(value) && typofValue === 'object' && Object.keys(value).map(field => <MagicRenderValues key={key+field} jsonDeconstructed={value[field]} />)}
+          {Array.isArray(value) && value.map((item, index) => <MagicRenderValues key={(key + index)} jsonDeconstructed={item} />)}
+          {!Array.isArray(value) && typofValue === 'object' && Object.keys(value).map(field => <MagicRenderValues key={key + field} jsonDeconstructed={value[field]} />)}
         </div>
       }
     </div>
   );
 }
 
-export const MagicRenderRaw = ({ jsonDeconstructed }: MagicRnderProps) => {
+export const MagicRenderRaw = ({ jsonDeconstructed }: MagicRenderProps) => {
 
   return (
     <Editor
       height='95vh'
-      width='50vw'
       defaultLanguage='json'
       value={JSON.stringify(jsonDeconstructed, null, 2)}
     />
   )
 }
 
-export const MagicRenderEdit = ({ jsonDeconstructed }: MagicRnderProps) => {
-
-  function Render({ target }) {
-    if (target === null || target === undefined) return null;
-
-    if (typeof target === 'object') {
-      if (target.type === 'array' && Array.isArray(target.value)) return target.value.map(item => <Render target={item} />);
-      if (target.type && target.key && typeof target.value === 'object') {
-        return (
-          <div style={{ marginLeft: '10px' }} key={target.key}>
-            <div>
-              <div><i>{target.type}</i></div>
-            </div>
-            {target.value && Object.keys(target.value).map(field => {
-              return (
-                <div key={field}>
-                  <b>{field}</b>: <Render target={target.value[field]} />
-                </div>
-              )
-            })}
-          </div>
-        )
-      }
-
-      return (<div><pre>{JSON.stringify(target, null, 2)}</pre></div>)
-    }
-
-    return (
-      <div>{typeof target}</div>
-    )
-  }
-
+export const MagicRenderJsonFromMagic = ({ jsonDeconstructed }: MagicRenderProps) => {
+  const json = magicJsonToJson(jsonDeconstructed);
   return (
-    <div style={{ padding: '5px' }}>
-      <Render target={jsonDeconstructed} />
-    </div>
+    <Editor
+      height='95vh'
+      defaultLanguage='json'
+      value={JSON.stringify(json, null, 2)}
+    />
   )
 }
 
 export const MagicRenderStats = ({ jsonDeconstructed }) => {
+  const { __stats = {} } = jsonDeconstructed;
   return (
-    <div>
-      <div>Stats</div>
-    </div>
+    <Tabs defaultActiveKey="1" items={[
+      {
+        label: 'Html',
+        key: 'html',
+        children: (<div>html goes here</div>)
+      },
+      {
+        label: 'JSON',
+        key: 'json',
+        children: <Editor
+          height='95vh'
+          defaultLanguage='json'
+          value={JSON.stringify(__stats, null, 2)}
+        />
+      }
+    ]} />
   )
 }
 
 interface MagicJsonOptions {
-  renderType?: 'values' | 'raw' | 'edit' | 'stats';
+  renderType?: 'values' | 'raw' | 'edit' | 'stats' | 'revert';
   renderStats?: boolean;
 }
 
@@ -97,8 +80,9 @@ interface MagicJsonProps {
 }
 
 export const MagicRender = ({ json, options = {} }: MagicJsonProps) => {
-  const deconstructed = constructMetaJSON(json);
-  const { renderType = 'edit', renderStats = true } = options;
+  const magicJson = new MagicJson(json, { stats: true });
+  const deconstructed = magicJson.jsonMagic
+  const { renderType = 'edit' } = options;
 
   if (renderType === 'values') {
     return <MagicRenderValues jsonDeconstructed={deconstructed} />
@@ -106,15 +90,19 @@ export const MagicRender = ({ json, options = {} }: MagicJsonProps) => {
   if (renderType === 'stats') {
     return <MagicRenderStats jsonDeconstructed={deconstructed} />
   }
+  if (renderType === 'revert') {
+    return <MagicRenderJsonFromMagic jsonDeconstructed={deconstructed} />
+  }
   if (renderType === 'raw') {
     return <MagicRenderRaw jsonDeconstructed={deconstructed} />
   }
   if (renderType === 'edit') {
-    return <MagicRenderEdit jsonDeconstructed={deconstructed} />
+    return <MagicRenderSettingsEditor jsonDeconstructed={deconstructed} />
   }
 
   return (
     <div>
+      <h1>Invalid render type</h1>
     </div>
   )
 }

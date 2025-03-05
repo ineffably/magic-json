@@ -1,15 +1,15 @@
 {
   "name": "@magic-json/editor",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "scripts": {
-    "clean": "rm -rf ./lib",
     "watch": "webpack watch --mode development",
+    "clean": "rm -rf ./lib",
+    "build": "npm run clean && webpack --mode production",
     "build:dev": "webpack --mode development",
-    "build": "webpack --mode production",
-    "build:clean": "npm run clean && npm run build",
+    "build:dev:clean": "npm run clean && npm run build:dev",
     "test": "jest --config ./../../jest.config.js ./test/rule-editor.test.tsx --coverage",
-    "gendocs": "typedoc --out ./docs ./src"
+    "gendocs": "typedoc --excludeExternals --exclude '../../node_modules/**' --out ./docs ./src"
   },
   "keywords": [],
   "author": "",

@@ -1,4 +1,4 @@
-import { constructMetaJSON } from "../src";
+import { constructMagicJSON } from "../src";
 import { hasShape, isEmptyObject } from "../src/utils";
 
 describe('core tests', () => {
@@ -57,9 +57,10 @@ describe('core tests', () => {
         key: '_root',
         path: '',
         type: 'object',
-        value: null
+        value: null,
+        __stats: {}
       };
-      const testJsonResult = constructMetaJSON(null);
+      const testJsonResult = constructMagicJSON(null, 0, {}, '');
       expect(hasShape(testJsonResult, desiredValue)).toBe(true);
     })
 
@@ -73,7 +74,7 @@ describe('core tests', () => {
       };
       const testJson = {};
       // hasShape(testJson, desiredShape)
-      const testJsonResult = constructMetaJSON(testJson);
+      const testJsonResult = constructMagicJSON(testJson);
 
     })
 

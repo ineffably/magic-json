@@ -1,6 +1,6 @@
 {
-  "name": "magic-json",
-  "version": "1.0.0",
+  "name": "@magic-json/examples",
+  "version": "0.1.0",
   "private": true,
   "keywords": [
     "monorepo",

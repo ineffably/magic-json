@@ -1,17 +1,16 @@
 {
   "name": "@magic-json/core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "types": "lib/src/index.d.ts",
   "scripts": {
-    "test": "jest ./test/**/*.test.ts* --config ./../../jest.config.js  --coverage",
-    "clean": "rm -rf ./lib",
+    "test": "jest --config ../../jest.config.js",
     "watch": "webpack watch --mode development",
+    "clean": "rm -rf ./lib",
+    "build": "npm run clean && webpack --mode production",
     "build:dev": "webpack --mode development",
-    "build:clean:dev": "npm run clean && npm run build:dev",
-    "build": "webpack --mode production",
-    "build:clean": "npm run clean && npm run build",
-    "gendocs": "typedoc --out ./docs ./src"
+    "build:dev:clean": "npm run clean && npm run build:dev",
+    "gendocs": "typedoc --exclude ../../node_modules/** --out ./docs ./src"
   },
   "keywords": [],
   "author": "",
